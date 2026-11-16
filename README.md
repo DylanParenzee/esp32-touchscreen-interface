@@ -8,7 +8,7 @@ My longer-term goal is to use what I learn here in bigger projects, including a 
 
 ## Current progress
 
-**In progress — serial communication and TFT backlight tested; SPI display communication is next.**
+**In progress — SPI graphics working: full-screen blue confirmed with the ST7789 library and colour inversion disabled. Touch input has not yet been tested.**
 
 | Milestone | Result |
 | --- | --- |
@@ -17,11 +17,11 @@ My longer-term goal is to use what I learn here in bigger projects, including a 
 | Confirm readable output in Serial Monitor | Completed |
 | Measure the board's 3.3V supply | Completed |
 | Power the TFT backlight | Completed — white illuminated screen |
-| Send drawing commands to TFT over SPI | Not started |
+| Send drawing commands to TFT over SPI | Completed guided first graphics test — full-screen blue |
 | Read touchscreen input | Not started |
 | Build a simple graphical interface | Not started |
 
-A white screen **only confirms that the backlight illuminates**. I haven't displayed graphics or tested the touchscreen yet.
+The first ILI9341 graphics test coloured only part of the panel and left static below. Testing with Adafruit ST7789 filled the full panel, although the requested blue initially appeared yellow. Adding `tft.invertDisplay(false)` produced a full-screen blue result. This demonstrates a compatible software configuration, **not definitive identification of the controller IC**. Touch input has not been tested.
 
 ## Hardware
 
@@ -29,7 +29,7 @@ A white screen **only confirms that the backlight illuminates**. I haven't displ
 - 2.8-inch 240 × 320 TFT module with SPI interface, board marked V1.1
 - USB-C data cable, jumper wires, breadboard and multimeter
 
-The display controller is **not yet confirmed**. ILI9341 is a candidate for this style of module, and the touch-controller part number still needs verification before choosing libraries.
+The display controller's marking is **not yet confirmed**, but the Adafruit ST7789 library produces a full-screen image using `tft.init(240, 320)` and `tft.invertDisplay(false)`. The touch-controller part number also remains unverified.
 
 See [hardware notes](docs/HARDWARE.md) for the connections tested so far and what remains to be verified.
 
@@ -40,12 +40,17 @@ See [hardware notes](docs/HARDWARE.md) for the connections tested so far and wha
 - Board target used: `ESP32S3 Dev Module`
 - `USB CDC On Boot` enabled for the serial-output test
 - Serial Monitor set to **115200 baud**
+- Adafruit GFX + Adafruit ST7735/ST7789 library for the first working graphics test
 
 ### First working test
 
 My first successful upload was a small serial-output sketch. It prints a startup message and then repeats a message every second, which let me confirm that the board was actually running my program.
 
 The [serial smoke-test sketch](src/serial_smoke_test/serial_smoke_test.ino) is the guided example I uploaded and verified on the board. It's not touchscreen code.
+
+### First successful graphics test
+
+I followed a guided [ST7789 full-screen colour test](src/st7789_colour_test/st7789_colour_test.ino). With SPI wires connected, the first driver choice only updated part of the screen. The alternative driver filled the display, and switching off inversion gave the intended blue. The sketch in this repository records the working configuration presented during the exercise.
 
 ## Development record
 
@@ -55,6 +60,6 @@ The [serial smoke-test sketch](src/serial_smoke_test/serial_smoke_test.ino) is t
 
 ## Next milestone
 
-Identify the TFT controller and pin labels, connect the ESP32-S3 and display over SPI, and get a colour or simple shape onto the screen. After that, I'll work on reading touch coordinates.
+With the first full-screen graphics test working, the next milestone is to confirm the display/controller details and progress to controlled graphics and, in a later lesson, touch input.
 
-I'll add photos, diagrams and more code as I test each part of the system. For now, this repository shows the starting point, not a completed interface.
+I'll add photos, diagrams and more code as I test each part of the system. For now, this repository documents an early working display milestone, not a completed interface.
