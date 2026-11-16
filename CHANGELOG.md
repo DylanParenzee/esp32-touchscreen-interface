@@ -12,7 +12,11 @@ I tested an alternative software configuration with the Adafruit ST7789 driver. 
 
 **Verified:** Complete blue fill using the ST7789 library and the guided wiring. The exact display controller chip and touch input are not yet verified.
 
-**Next:** Explain the fault-finding logic in my own words; later test additional graphics and touch input.
+**Understanding check (completed):** I explained that different graphics drivers can send different controller instructions or interpret pixel sizes and addressing differently, so a driver mismatch can produce incomplete or incorrect graphics even with the same wiring. The precise controller identity remains unverified.
+
+**Lesson status:** Completed — successful physical full-screen graphics test and satisfactory explanation in my own words.
+
+**Later work:** Additional graphics and touch input remain separate milestones.
 
 ## 15 November 2026 — Getting the ESP32-S3 and TFT powered up
 
