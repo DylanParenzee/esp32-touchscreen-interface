@@ -1,5 +1,19 @@
 # Development Log
 
+## 17 November 2026 — First full-screen colour over SPI
+
+**Result: first graphics milestone working (guided test).**
+
+I connected my ESP32-S3 and 2.8-inch TFT using SPI, then uploaded a colour-fill sketch. With the initial Adafruit ILI9341 library, the upper portion of the display changed colour but the lower portion remained white or showed multicoloured static. I was worried the screen might be damaged.
+
+I tested an alternative software configuration with the Adafruit ST7789 driver. This time the entire screen was filled, but the requested blue appeared yellow. Adding `tft.invertDisplay(false)` after `tft.init(240, 320)` corrected the displayed colour: the **entire screen showed blue**.
+
+**What I learned:** A working backlight alone doesn't confirm LCD communication. Partial graphics and wrong colours can arise from driver or controller configuration, not necessarily broken hardware. Changing one setting at a time helped isolate the problem.
+
+**Verified:** Complete blue fill using the ST7789 library and the guided wiring. The exact display controller chip and touch input are not yet verified.
+
+**Next:** Explain the fault-finding logic in my own words; later test additional graphics and touch input.
+
 ## 15 November 2026 — Getting the ESP32-S3 and TFT powered up
 
 I started with the Freenove ESP32-S3 and a 2.8-inch TFT module. My first goal was to prove that the hardware was powered correctly and that I could upload and run a program.
