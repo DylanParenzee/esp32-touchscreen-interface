@@ -24,17 +24,27 @@ A multimeter measured approximately 3.3V at the ESP32 supply. The display showed
 
 These connections were used for an initial test of this specific module. Before using a different display, I'll check that module's voltage and backlight requirements.
 
+## SPI display connections tested
+
+| ESP32-S3 | TFT module | Function |
+| --- | --- | --- |
+| GPIO 11 | `SDI (MOSI)` | Data from ESP32 to display |
+| GPIO 12 | `SCK` | SPI clock |
+| GPIO 10 | `CS` | Display chip select |
+| GPIO 9 | `DC` | Data/command select |
+| GPIO 8 | `RESET` | Display reset |
+
+These connections, along with the supply and backlight wiring, produced a full-screen blue display with the Adafruit ST7789 library using `tft.init(240, 320)`, `tft.invertDisplay(false)` and the 10 MHz SPI setting.
+
 ## Not yet connected or verified
 
-- Actual display-controller IC (possibly ILI9341, **unconfirmed**)
+- Actual display-controller IC marking (**unconfirmed**, although the ST7789 library works)
 - Touch-controller IC (possibly XPT2046, **unconfirmed**)
-- Exact SPI pin labels and ESP32-S3 GPIO mapping
-- Chip-select, data/command and reset signals
-- Graphics library configuration
+- Touch controller wiring and interaction
 - Touch calibration and input tests
 
 ## Next wiring task
 
-I'll verify the TFT module's markings and controller first, then document an actual GPIO-to-display wiring table after making and testing those connections.
+I'll verify the controller marking when possible and then proceed with an isolated touchscreen input test in a future lesson.
 
-**Current limitation:** A white screen is a backlight test, not a completed LCD or touch test.
+**Current limitation:** Drawing a full-screen colour works, but touchscreen input has not been tested.
