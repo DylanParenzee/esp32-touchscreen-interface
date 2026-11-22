@@ -1,5 +1,19 @@
 # Development Log
 
+## 22 November 2026 — First dashboard layout: heading, buttons and styling
+
+I've moved from testing full-screen colours to drawing my first simple desk-control layout. I set up a **DESK CONTROL** heading and two rounded rectangular buttons labelled **LAMP** and **LED**. At this point they're graphics drawn on the TFT, not functioning touch buttons.
+
+It took me a while to get the text in the right place. I experimented with `fillRect()` and `fillRoundRect()`, different X/Y coordinates, `setCursor()`, FreeSans Bold font sizes and Adafruit colours. I also tried custom shades of green with `color565()`.
+
+The main problem was the **order of the drawing instructions**. I had the label text declared and drawn before the button, so when the button was drawn afterward it covered up the text. I eventually worked out that I needed to draw the button first, then the text on top of it.
+
+I learned that `setCursor(x, y)` controls where text begins, while the rectangle's X/Y coordinates set its position and its width/height set its size. The corner-radius value controls how rounded the button looks. I found out that changing font sizes can also mean adjusting text position.
+
+**Result:** The ESP32-S3 display now shows a heading and two coloured, rounded button graphics. I've photographed the working screen. Touch input and actual appliance switching are still future work.
+
+**Next:** Get the touchscreen reading touch coordinates, then make those buttons respond to presses.
+
 ## 17 November 2026 — First full-screen colour over SPI
 
 **Result: first graphics milestone working (guided test).**
