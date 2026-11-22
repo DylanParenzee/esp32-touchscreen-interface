@@ -8,7 +8,7 @@ My longer-term goal is to use what I learn here in bigger projects, including a 
 
 ## Current progress
 
-**In progress — SPI graphics working: full-screen blue confirmed with the ST7789 library and colour inversion disabled. Touch input has not yet been tested.**
+**In progress — SPI graphics working, with a simple heading and two visual buttons drawn on the screen. Touch input has not yet been tested.**
 
 | Milestone | Result |
 | --- | --- |
@@ -19,7 +19,7 @@ My longer-term goal is to use what I learn here in bigger projects, including a 
 | Power the TFT backlight | Completed — white illuminated screen |
 | Send drawing commands to TFT over SPI | Completed guided first graphics test — full-screen blue |
 | Read touchscreen input | Not started |
-| Build a simple graphical interface | Not started |
+| Build a simple graphical interface | In progress — heading and two visual buttons, experimenting with fonts, colours and positioning |
 
 The first ILI9341 graphics test coloured only part of the panel and left static below. Testing with Adafruit ST7789 filled the full panel, although the requested blue initially appeared yellow. Adding `tft.invertDisplay(false)` produced a full-screen blue result. This demonstrates a compatible software configuration, **not definitive identification of the controller IC**. Touch input has not been tested.
 
@@ -52,6 +52,20 @@ The [serial smoke-test sketch](src/serial_smoke_test/serial_smoke_test.ino) is t
 
 I followed a guided [ST7789 full-screen colour test](src/st7789_colour_test/st7789_colour_test.ino). With SPI wires connected, the first driver choice only updated part of the screen. The alternative driver filled the display, and switching off inversion gave the intended blue. The sketch in this repository records the working configuration presented during the exercise.
 
+### My first on-screen control layout — 22 November 2026
+
+I moved on from filling the screen with a solid colour to making something that looks more like a control panel. I added a heading and two buttons using Adafruit GFX.
+
+Getting the buttons and text positioned properly took more trial and error than I expected. I was adjusting the X/Y coordinates, rectangle sizes and the text cursor, then uploading the sketch to see how each change looked on the actual screen.
+
+One problem took a while to figure out: I was drawing the text **before** drawing the button underneath it. The button was then being drawn over the top and covering the text. I eventually realised the order of drawing instructions matters. Drawing the button first and the label afterwards solved that part.
+
+I also experimented with Adafruit's built-in colours, custom green shades using `color565()`, and different FreeSans Bold font sizes. I'm starting to understand how coordinates, font size and drawing order all affect the finished layout.
+
+**Current result:** A heading and two drawn buttons. These are visual elements only — they don't respond to touch or switch any electrical outputs yet.
+
+**Project photo:** I took a photo of this stage of the build; it will be added to the repository's image folder.
+
 ## Development record
 
 - [Development log](CHANGELOG.md) — dated tests, observations and troubleshooting
@@ -60,6 +74,6 @@ I followed a guided [ST7789 full-screen colour test](src/st7789_colour_test/st77
 
 ## Next milestone
 
-With the first full-screen graphics test working, the next milestone is to confirm the display/controller details and progress to controlled graphics and, in a later lesson, touch input.
+The first visual control-panel layout is now in place. The next milestone is reading touch coordinates and making the on-screen buttons interactive; connected device switching will come later.
 
 I'll add photos, diagrams and more code as I test each part of the system. For now, this repository documents an early working display milestone, not a completed interface.
