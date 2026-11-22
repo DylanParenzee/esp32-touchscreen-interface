@@ -66,7 +66,7 @@ I also experimented with Adafruit's built-in colours, custom green shades using 
 
 **Project photo — 22 November 2026:** My first desk control layout, showing the `DESK CONTROL` heading and the two `LAMP` and `LED` buttons running on the actual 2.8-inch TFT display.
 
-![ESP32-S3 showing my first desk control layout, with LAMP and LED buttons](images/DEDBFC21-6C05-4BDB-A871-1D86FF5D7FA3.JPG)
+<img src="images/DEDBFC21-6C05-4BDB-A871-1D86FF5D7FA3.JPG" alt="ESP32-S3 showing the first desk control layout with LAMP and LED buttons" width="260">
 
 *The buttons are drawn on-screen but are not touch-sensitive yet.*
 
