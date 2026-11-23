@@ -2,13 +2,13 @@
 
 I'm building a touchscreen interface with an ESP32-S3 as part of learning C++ and embedded software engineering.
 
-I started with a Freenove ESP32-S3 development board and a small 2.8-inch TFT display. Rather than jumping straight into a finished interface, I'm working through the basics: checking the power supply, proving that I can upload code, getting the display to communicate over SPI, and eventually handling touch input.
+I started with a Freenove ESP32-S3 development board and a small 2.8-inch TFT display. Rather than jumping straight into a finished interface, I'm working through the basics: checking the power supply, uploading code, getting the display working over SPI, and reading touches from the screen.
 
 My longer-term goal is to use what I learn here in bigger projects, including a facial-recognition door lock. This repository is a record of what I actually tested, the problems I ran into, and how I worked through them.
 
 ## Current progress
 
-**In progress — SPI graphics working, with a simple heading and two visual buttons drawn on the screen. Touch input has not yet been tested.**
+**In progress — the display works, my simple control-panel design is on screen, and I've now tested touch input successfully. The buttons are not interactive yet.**
 
 | Milestone | Result |
 | --- | --- |
@@ -18,10 +18,12 @@ My longer-term goal is to use what I learn here in bigger projects, including a 
 | Measure the board's 3.3V supply | Completed |
 | Power the TFT backlight | Completed — white illuminated screen |
 | Send drawing commands to TFT over SPI | Completed guided first graphics test — full-screen blue |
-| Read touchscreen input | Not started |
+| Read touchscreen input | Completed first test — touch presses show X/Y readings in Serial Monitor |
+| Calibrate touch coordinates | Not started — need to measure all four corners |
+| Make LAMP and LED respond to touch | Not started |
 | Build a simple graphical interface | In progress — heading and two visual buttons, experimenting with fonts, colours and positioning |
 
-The first ILI9341 graphics test coloured only part of the panel and left static below. Testing with Adafruit ST7789 filled the full panel, although the requested blue initially appeared yellow. Adding `tft.invertDisplay(false)` produced a full-screen blue result. This demonstrates a compatible software configuration, **not definitive identification of the controller IC**. Touch input has not been tested.
+The first ILI9341 graphics test coloured only part of the panel and left static below. Testing with Adafruit ST7789 filled the full panel, although the requested blue initially appeared yellow. Adding `tft.invertDisplay(false)` produced a full-screen blue result. This demonstrates a compatible software configuration, **not definitive identification of the controller IC**. On 23 November, I also got a separate touchscreen test working and could read touch positions in Serial Monitor.
 
 ## Hardware
 
@@ -38,9 +40,10 @@ See [hardware notes](docs/HARDWARE.md) for the connections tested so far and wha
 - C++ using Arduino IDE
 - ESP32 board package by Espressif Systems
 - Board target used: `ESP32S3 Dev Module`
-- `USB CDC On Boot` enabled for the serial-output test
+- `USB CDC On Boot` disabled for the working serial and touchscreen tests on my current USB connection
 - Serial Monitor set to **115200 baud**
 - Adafruit GFX + Adafruit ST7735/ST7789 library for the first working graphics test
+- XPT2046_Touchscreen library for the touch test (exact touch-controller chip not confirmed)
 
 ### First working test
 
@@ -70,6 +73,22 @@ I also experimented with Adafruit's built-in colours, custom green shades using 
 
 *The buttons are drawn on-screen but are not touch-sensitive yet.*
 
+### Getting the touchscreen working — 23 November 2026
+
+Today I started working on the touch part of the screen. The goal is to eventually press the `LAMP` and `LED` buttons I've already drawn, instead of just having them sit there.
+
+I connected four more wires for the touch side of the display. Two of them share the same SPI connections as the screen itself, while the touch controller has its own chip-select pin. I used GPIO 12 for `T_CLK`, GPIO 11 for `T_DIN`, GPIO 13 for `T_DO` and GPIO 14 for `T_CS`. I left `T_IRQ` disconnected.
+
+I made a separate touch-test sketch so I wouldn't lose the control-panel design I'd already worked on. At first it wasn't working properly. The display was white, and Serial Monitor either showed startup messages, strange characters or nothing useful. That made it hard to tell whether the touch code was actually running.
+
+I went back to a simple test that printed a message every second. The sketch uploaded successfully, but I still couldn't see the messages. I checked the baud rate and USB settings, then tried disconnecting the new touch wires to see if they were causing the problem. That didn't change anything. **Changing `USB CDC On Boot` to Disabled and uploading again fixed the serial output** with my current setup.
+
+After that I put the touch wires back and tried the touchscreen test again. This time it worked. When I pressed different parts of the screen, I could see the X and Y readings changing in Serial Monitor.
+
+I also learned what those readings are useful for. The X and Y values tell me where the screen was pressed. If I know the area covered by a button, I can check whether a press happened inside it. The readings from the touch test are still raw numbers, though, so they need to be matched up with the screen's drawing coordinates first.
+
+**Where I stopped:** Touch detection works, but I haven't measured the four corners to calibrate it yet. I also haven't added touch handling to my original `DESK CONTROL` sketch, so the `LAMP` and `LED` buttons are still just graphics. I haven't connected any relays or powered devices.
+
 ## Development record
 
 - [Development log](CHANGELOG.md) — dated tests, observations and troubleshooting
@@ -78,6 +97,6 @@ I also experimented with Adafruit's built-in colours, custom green shades using 
 
 ## Next milestone
 
-The first visual control-panel layout is now in place. The next milestone is reading touch coordinates and making the on-screen buttons interactive; connected device switching will come later.
+The display and basic touch test are now working separately. Next I'll record touch readings from the four corners, work out how they match the display coordinates, and then try detecting presses on my existing LAMP and LED buttons. Connected device switching will come later.
 
 I'll add photos, diagrams and more code as I test each part of the system. For now, this repository documents an early working display milestone, not a completed interface.
